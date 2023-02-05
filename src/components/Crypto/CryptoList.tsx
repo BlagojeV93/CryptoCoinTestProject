@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 import CryptoItem from './CryptoItem';
-import Api from '../service/api'
-import { FormatedCrypto } from '../model/CryptoModel';
-import Loading from './Loading';
-import { removePossibleDuplicateItems } from '../helpers/ArrayHelper';
-import COLORS from '../helpers/styles/Colors';
-import { CryptoBuilder } from '../data-builder/CryptoDataBuilder';
+import Api from '../../service/api'
+import { FormatedCrypto } from '../../model/CryptoModel';
+import Loading from '../common/Loading';
+import { removePossibleDuplicateItems } from '../../helpers/ArrayHelper';
+import COLORS from '../../helpers/styles/Colors';
+import { CryptoBuilder } from '../../data-builder/CryptoDataBuilder';
 
 const CryptoList: React.FC = () => {
-    const [coinsList, setCoinsList] = useState<FormatedCrypto[]>([])
+    const [coinsList, setCoinsList] = useState<FormatedCrypto[]>()
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -20,13 +20,13 @@ const CryptoList: React.FC = () => {
     const fetchCryptoData = async () => {
         setLoading(true)
         let page = 1
-        if (coinsList.length) {
-            page = Math.ceil((coinsList.length / 100) + 1)
+        if (coinsList?.length) {
+            page = Math.ceil((coinsList?.length / 100) + 1)
         }
         try {
             const rawData = await Api.getEndpoints().getCoinsInformation(page)
             const newData = new CryptoBuilder().formatAll(rawData).build()
-            setCoinsList(prevState => removePossibleDuplicateItems(prevState, newData))
+            setCoinsList((prevState = []) => removePossibleDuplicateItems(prevState, newData))
         } catch (error) {
             console.log(error)
             showErrAlertAndTryAgain()
@@ -54,8 +54,16 @@ const CryptoList: React.FC = () => {
         }
     }
 
+    const noDataLoaded = () => {
+        return (
+            <View style={styles.noDataContainer}>
+                <Text style={styles.titleText}>No data retrieved</Text>
+            </View>
+        )
+    }
+
     const renderContent = () => {
-        if (coinsList.length) {
+        if (coinsList) {
             return (
                 <FlatList
                     contentContainerStyle={styles.listStyle}
@@ -63,6 +71,7 @@ const CryptoList: React.FC = () => {
                     renderItem={({ item }) => <CryptoItem data={item} />}
                     keyExtractor={(item) => item.id}
                     onEndReached={() => fetchMoreData()}
+                    ListEmptyComponent={() => noDataLoaded()}
                     ListFooterComponent={loadMoreIndicator()}
                 />
             )
@@ -93,6 +102,11 @@ const styles = StyleSheet.create({
     },
     loadMoreIndicatorContainer: {
         marginVertical: 10
+    },
+    noDataContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
 

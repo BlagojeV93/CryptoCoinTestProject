@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import COLORS from '../helpers/styles/Colors';
-import { FormatedCrypto } from '../model/CryptoModel';
+import COLORS from '../../helpers/styles/Colors';
+import { FormatedCrypto } from '../../model/CryptoModel';
 
 interface CryptoItemProps {
     data: FormatedCrypto
