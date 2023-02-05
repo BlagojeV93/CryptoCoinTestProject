@@ -46,6 +46,16 @@ const CryptoList: React.FC<CryptoListProps> = () => {
         }
     }
 
+    const loadMoreIndicator = () => {
+        if (loading) {
+            return (
+                <View style={styles.loadMoreIndicatorContainer}>
+                    <Loading />
+                </View>
+            )
+        }
+    }
+
     const renderContent = () => {
         if (coinsList.length) {
             return (
@@ -55,7 +65,7 @@ const CryptoList: React.FC<CryptoListProps> = () => {
                     renderItem={({ item }) => <CryptoItem data={item} />}
                     keyExtractor={(item) => item.id}
                     onEndReached={() => fetchMoreData()}
-                    ListFooterComponent={loading ? <Loading /> : <></>}
+                    ListFooterComponent={loadMoreIndicator()}
                 />
             )
         }
@@ -82,6 +92,9 @@ const styles = StyleSheet.create({
     },
     listStyle: {
         flexGrow: 1
+    },
+    loadMoreIndicatorContainer: {
+        marginVertical: 10
     }
 })
 

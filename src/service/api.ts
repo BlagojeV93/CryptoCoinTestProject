@@ -35,7 +35,6 @@ class Api {
     _handleError = (error: AxiosError) => Promise.reject(error)
 
     getCoinsInformation = async (page: number, currency = CURRENCIES.USD): Promise<Crypto[]> => {
-        console.log(page, '-=================')
         const { data } = await this._apiConfig.get(`/coins/markets?vs_currency=${currency}&page=${page}`)
         return data
     }
