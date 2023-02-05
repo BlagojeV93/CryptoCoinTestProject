@@ -2,17 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 import CryptoItem from './CryptoItem';
 import Api from '../service/api'
-import { Crypto } from '../model/CryptoModel';
+import { FormatedCrypto } from '../model/CryptoModel';
 import Loading from './Loading';
 import { removePossibleDuplicateItems } from '../helpers/ArrayHelper';
-import COLORS from '../helpers/colors';
+import COLORS from '../helpers/styles/Colors';
+import { CryptoBuilder } from '../data-builder/CryptoDataBuilder';
 
-interface CryptoListProps {
-
-}
-
-const CryptoList: React.FC<CryptoListProps> = () => {
-    const [coinsList, setCoinsList] = useState<Crypto[]>([])
+const CryptoList: React.FC = () => {
+    const [coinsList, setCoinsList] = useState<FormatedCrypto[]>([])
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -27,7 +24,8 @@ const CryptoList: React.FC<CryptoListProps> = () => {
             page = Math.ceil((coinsList.length / 100) + 1)
         }
         try {
-            const newData = await Api.getEndpoints().getCoinsInformation(page)
+            const rawData = await Api.getEndpoints().getCoinsInformation(page)
+            const newData = new CryptoBuilder().formatAll(rawData).build()
             setCoinsList(prevState => removePossibleDuplicateItems(prevState, newData))
         } catch (error) {
             console.log(error)

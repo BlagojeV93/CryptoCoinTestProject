@@ -9,3 +9,15 @@ export interface Crypto {
     market_cap_change_percentage_24h: number;
 }
 
+export interface FormatedCrypto {
+    id: string;
+    symbol: string;
+    name: string;
+    uri: string;
+    rank: number;
+    price: string;
+    marketCapValue: string;
+    marketChange: number;
+    marketChangeValue: string;
+}
+

@@ -1,9 +1,9 @@
-import { Crypto } from "../model/CryptoModel"
+import { FormatedCrypto } from "../model/CryptoModel"
 
-export const removePossibleDuplicateItems = (currentArr: Crypto[], newArr: Crypto[]) => {
+export const removePossibleDuplicateItems = (currentArr: FormatedCrypto[], newArr: FormatedCrypto[]) => {
     const newArray = [...currentArr]
-    newArr.forEach((newItem: Crypto) => {
-        const possibleDuplicate = currentArr.find((item: Crypto) => item.id === newItem.id)
+    newArr.forEach((newItem: FormatedCrypto) => {
+        const possibleDuplicate = currentArr.find((item: FormatedCrypto) => item.id === newItem.id)
         if (!possibleDuplicate) {
             newArray.push(newItem)
         }

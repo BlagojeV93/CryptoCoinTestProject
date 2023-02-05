@@ -1,26 +1,24 @@
 import React, { memo } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import COLORS from '../helpers/colors';
-import { convertToInternationalCurrencySystem } from '../helpers/MarketCapHelper';
-import { Crypto } from '../model/CryptoModel';
+import COLORS from '../helpers/styles/Colors';
+import { FormatedCrypto } from '../model/CryptoModel';
 
 interface CryptoItemProps {
-    data: Crypto
+    data: FormatedCrypto
 }
 
 const CryptoItem: React.FC<CryptoItemProps> = ({ data }) => {
 
     const {
-        name = '',
-        symbol = '',
-        market_cap = 0,
-        market_cap_rank,
-        current_price = 0,
-        image: uri,
-        market_cap_change_percentage_24h: marketChange,
+        name,
+        symbol,
+        uri,
+        rank,
+        price,
+        marketCapValue,
+        marketChange,
+        marketChangeValue
     } = data
-
-    const marketCapValue = `MCap ${convertToInternationalCurrencySystem(market_cap)}`
 
     const renderMarketChangePercentage = () => {
         const positiveMarketChange = marketChange >= 0
@@ -29,7 +27,7 @@ const CryptoItem: React.FC<CryptoItemProps> = ({ data }) => {
         return (
             <View style={styles.marketChangeContainer}>
                 <View style={[styles.indicator, dynamicIndicatorStyles]} />
-                <Text style={textStyle}>{`${marketChange}%`}</Text>
+                <Text style={textStyle}>{marketChangeValue}</Text>
             </View>
         )
     }
@@ -41,14 +39,14 @@ const CryptoItem: React.FC<CryptoItemProps> = ({ data }) => {
                 <Text style={styles.title}>{name}</Text>
                 <View style={styles.cryptoOtherInfo}>
                     <View style={styles.rankContainer}>
-                        <Text style={styles.rankText}>{market_cap_rank}</Text>
+                        <Text style={styles.rankText}>{rank}</Text>
                     </View>
                     <Text style={styles.symbolText}>{symbol}</Text>
                     {renderMarketChangePercentage()}
                 </View>
             </View>
             <View style={styles.marketValuesContainer}>
-                <Text style={styles.valueText}>{`$${current_price.toLocaleString()}`}</Text>
+                <Text style={styles.valueText}>{price}</Text>
                 <Text style={styles.valueText}>{marketCapValue}</Text>
             </View>
         </View>
