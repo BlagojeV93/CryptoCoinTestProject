@@ -1,15 +1,16 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { Crypto } from '../model/CryptoModel';
 
 interface CryptoItemProps {
-
+    data: Crypto
 }
 
-const CryptoItem: React.FC<CryptoItemProps> = () => {
+const CryptoItem: React.FC<CryptoItemProps> = ({ data }) => {
 
     return (
         <View>
-            <Text>Item</Text>
+            <Text>{data.name}</Text>
         </View>
     );
 }
